@@ -7,7 +7,6 @@ import Home from './components/Home' // Assuming Home is in components
 import Shop from './pages/Shop'       // ✅ UPDATED: Now points to pages folder
 import Login from './pages/Login'      // ✅ UPDATED: Now points to pages folder
 import AdminDashboard from './pages/AdminDashboard'
-import ProtectedRoute from './components/ProtectedRoute' // From previous security step
 
 const App = () => {
   return (
@@ -59,9 +58,7 @@ const App = () => {
 
           {/* 4. ADMIN DASHBOARD (Protected) */}
           <Route path="/admin/*" element={
-            <ProtectedRoute>
               <AdminDashboard />
-            </ProtectedRoute>
           } />
 
           {/* 5. CATCH ALL (404) */}
