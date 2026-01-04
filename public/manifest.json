@@ -1,0 +1,22 @@
+{
+  "name": "Njugush Mitumba",
+  "short_name": "NJUGUSHMITUMBA",
+  "description": "Grade A Mitumba Bales Sourced Globally. Shop wholesale sweatpants, dresses, and fashion.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#05122b",
+  "theme_color": "#05122b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

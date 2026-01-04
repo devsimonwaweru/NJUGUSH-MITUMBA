@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    
+    <!-- 1. Updated Viewport for PWA Feel -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    
+    <!-- 2. Meta Description for SEO -->
+    <meta name="description" content="Njugush Mitumba - Grade A Mitumba Bales Sourced Globally." />
+    
+    <!-- 3. Theme Color (Controls Browser/Taskbar Color) -->
+    <meta name="theme-color" content="#05122b" />
+
+    <!-- 4. Your Existing Favicon -->
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+    <!-- 5. iOS Icon for "Add to Home Screen" -->
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+
+    <!-- 6. PWA Manifest Link -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <title>njugush-mitumba</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }).catch(error => {
+            console.log('ServiceWorker registration failed: ', error);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
