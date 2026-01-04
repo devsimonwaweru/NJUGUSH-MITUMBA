@@ -13,7 +13,7 @@
     <meta name="theme-color" content="#05122b" />
 
     <!-- 4. Your Existing Favicon -->
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
     <!-- 5. iOS Icon for "Add to Home Screen" -->
     <link rel="apple-touch-icon" href="/icon-192.png" />
@@ -25,7 +25,11 @@
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- Main React App -->
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- 7. Service Worker Registration (Inline for reliability) -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
