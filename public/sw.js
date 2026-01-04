@@ -1,54 +1,37 @@
-const CACHE_NAME = 'njugush-pwa-v2'; // Changed version to force a refresh
-const ASSETS_CACHE = 'njugush-assets-v2';
+const CACHE_NAME = 'njugush-pwa-v4';
+const STATIC_ASSETS = ['/hero-bales.jpg', '/manifest.json']; // Do NOT cache index.html to avoid hash conflicts
 
-// 1. Install: Only Cache Static Assets (Images, Icons)
+// 1. Install Event: Cache only safe static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(ASSETS_CACHE).then((cache) => {
-      // We DO NOT cache index.html here.
-      // This ensures users always get the latest code when they refresh.
-      return cache.addAll([
-        // Add your specific images here if you want them offline
-        '/hero-bales.jpg', 
-        '/vite.svg'
-      ]);
+    caches.open(CACHE_NAME).then((cache) => {
+      // We use .catch() to handle errors gracefully without crashing
+      return cache.addAll(STATIC_ASSETS).catch(err => {
+        console.log('Service Worker: Failed to cache some assets', err);
+      });
     })
   );
 });
 
-// 2. Fetch: Network First for Code, Cache First for Images
+// 2. Fetch Event: Network First, with automatic update
 self.addEventListener('fetch', (event) => {
-  const request = event.request;
-  const url = new URL(request.url);
-
-  // --- STRATEGY A: NETWORK FIRST (For HTML, JS, Manifest) ---
-  // If it's a document (HTML) or script, ALWAYS fetch from network.
-  // This prevents the "Stuck on old version" error.
-  if (request.destination === 'document' || 
-      request.destination === 'script' || 
-      request.destination === 'manifest' ||
-      url.pathname === '/sw.js') {
+  event.respondWith(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.match(event.request).then((cachedResponse) => {
         
-    return event.respondWith(
-      fetch(request)
-        .then((response) => {
-          // If network fails, optionally fall back to cache (optional, but keeps it fresh mostly)
-          return response || caches.match(request);
-        })
-        .catch(() => caches.match(request))
-    );
-  }
+        // 1. Try fetching from network
+        const fetchPromise = fetch(event.request)
+          .then((networkResponse) => {
+            // 2. If network fetch succeeds, update the cache in the background
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(event.request, networkResponse.clone());
+            }
+            return networkResponse;
+          });
 
-  // --- STRATEGY B: CACHE FIRST (For Images, CSS) ---
-  // For images, try cache first, then network.
-  return event.respondWith(
-    caches.match(request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-
-      return fetch(request).then((networkResponse) => {
-        return networkResponse || caches.match(request);
+        // 3. Return cached version immediately for speed (Network-First), 
+        // OR return the network promise if nothing is cached.
+        return cachedResponse || fetchPromise;
       });
     })
   );
