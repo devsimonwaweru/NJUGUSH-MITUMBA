@@ -48,11 +48,15 @@ const Footer = () => {
             <p className="text-sm text-gray-400 leading-relaxed mb-6">
               Your trusted partner for high-quality mitumba bales across Kenya. We empower retailers with Grade A stock at wholesale prices.
             </p>
-            {/* Trust Badge */}
-            <div className="flex items-center gap-2 bg-primary/50 px-4 py-2 rounded-lg border border-gray-700 w-fit">
+            
+            {/* Trust Badge - UPDATED: Now links to Login */}
+            <Link 
+              to="/login" 
+              className="flex items-center gap-2 bg-primary/50 hover:bg-primary/80 px-4 py-2 rounded-lg border border-gray-700 w-fit transition cursor-pointer"
+            >
               <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
               <span className="text-xs font-bold text-white">Verified Supplier</span>
-            </div>
+            </Link>
           </div>
 
           {/* 2. Quick Links Column */}

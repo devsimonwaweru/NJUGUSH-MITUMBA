@@ -1,126 +1,75 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { supabase } from './utils/supabaseClient'
-import { SettingsProvider } from './context/SettingsContext'
-
-// Components
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 
-// Modals
-import HowToOrderModal from './components/HowToOrderModal'
-import SourcingModal from './components/SourcingModal'
-import BusinessGuideModal from './components/BusinessGuideModal'
-
-// Pages
-import LandingPage from './pages/LandingPage'
-import Shop from './pages/Shop'
-import Login from './pages/Login'
-import AddProduct from './pages/AddProduct'
+// Page Components (Update paths here)
+import Home from './components/Home' // Assuming Home is in components
+import Shop from './pages/Shop'       // ✅ UPDATED: Now points to pages folder
+import Login from './pages/Login'      // ✅ UPDATED: Now points to pages folder
 import AdminDashboard from './pages/AdminDashboard'
+import ProtectedRoute from './components/ProtectedRoute' // From previous security step
 
-// ==========================================
-// NEW IMPORTS: Independent Pages
-// ==========================================
-import Spotlights from './pages/Spotlights'
-import SiteSettings from './pages/SiteSettings'
-
-function App() {
-  // --- AUTHENTICATION STATE ---
-  const [session, setSession] = useState(null)
-
-  useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setSession(session)
-    }
-    getSession()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  // --- MODAL STATES ---
-  const [isHowToOrderOpen, setIsHowToOrderOpen] = useState(false)
-  const [isSourcingOpen, setIsSourcingOpen] = useState(false)
-  const [isGuideOpen, setIsGuideOpen] = useState(false)
-
+const App = () => {
   return (
-    <SettingsProvider>
-      <Router>
-        
+    <BrowserRouter>
+      <div className="min-h-screen font-sans flex flex-col bg-gray-50">
         <Routes>
           
-          {/* === PUBLIC ROUTES === */}
-          
-          {/* 1. Landing Page (/) */}
-          <Route path="/" element={
-            <LandingPage 
-              onOpenHowToOrder={() => setIsHowToOrderOpen(true)} 
-              onOpenSourcing={() => setIsSourcingOpen(true)} 
-              onOpenGuide={() => setIsGuideOpen(true)}
-            />
+          {/* 1. HOME PAGE */}
+          <Route 
+            path="/" 
+            element={
+              <>
+                <Navbar />
+                <div className="flex-grow">
+                  <Home />
+                </div>
+                <Footer />
+              </>
+            } 
+          />
+
+          {/* 2. SHOP PAGE (Updated Path) */}
+          <Route 
+            path="/shop" 
+            element={
+              <>
+                <Navbar />
+                <div className="flex-grow">
+                  <Shop />
+                </div>
+                <Footer />
+              </>
+            } 
+          />
+
+          {/* 3. LOGIN PAGE (Updated Path) */}
+          <Route 
+            path="/login" 
+            element={
+              <>
+                <Navbar />
+                <div className="flex-grow">
+                  <Login />
+                </div>
+                <Footer />
+              </>
+            } 
+          />
+
+          {/* 4. ADMIN DASHBOARD (Protected) */}
+          <Route path="/admin/*" element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
           } />
 
-          {/* 2. Shop Page (/shop) */}
-          <Route path="/shop" element={
-            <Shop
-              onOpenHowToOrder={() => setIsHowToOrderOpen(true)} 
-              onOpenSourcing={() => setIsSourcingOpen(true)}
-            />
-          } />
-
-          {/* 3. Login Page (/login) */}
-          <Route path="/login" element={<Login />} />
-
-          {/* 4. Add Product Page (/admin/add-product) */}
-          <Route path="/admin/add-product" element={<AddProduct />} />
-
-          {/* === PROTECTED ADMIN ROUTES === */}
+          {/* 5. CATCH ALL (404) */}
+          <Route path="*" element={<Navigate to="/" replace />} />
           
-          {/* If user is logged in, show Admin Pages. If not, Redirect to Login */}
-          {session && session.user ? (
-            <>
-              {/* Main Dashboard */}
-              <Route path="/admin" element={<AdminDashboard session={session} />} />
-              
-              {/* Independent Pages */}
-              <Route path="/admin/spotlights" element={<Spotlights />} />
-              <Route path="/admin/settings" element={<SiteSettings />} />
-            </>
-          ) : (
-            <>
-              <Route path="/admin/*" element={<Navigate to="/login" replace />} />
-            </>
-          )}
-
         </Routes>
-
-        {/* === GLOBAL MODALS === */}
-        
-        {/* 1. How To Order Modal */}
-        <HowToOrderModal 
-          isOpen={isHowToOrderOpen} 
-          onClose={() => setIsHowToOrderOpen(false)} 
-        />
-
-        {/* 2. Sourcing Modal */}
-        <SourcingModal 
-          isOpen={isSourcingOpen} 
-          onClose={() => setIsSourcingOpen(false)} 
-        />
-
-        {/* 3. Business Guide Modal */}
-        <BusinessGuideModal 
-          isOpen={isGuideOpen} 
-          onClose={() => setIsGuideOpen(false)} 
-        />
-
-      </Router>
-    </SettingsProvider>
+      </div>
+    </BrowserRouter>
   )
 }
 
