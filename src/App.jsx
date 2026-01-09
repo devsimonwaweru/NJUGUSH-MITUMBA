@@ -1,13 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import Footer from './components/Footer'
 
-// Page Components (Update paths here)
-import Home from './components/Home' // Assuming Home is in components
-import Shop from './pages/Shop'       // ✅ UPDATED: Now points to pages folder
-import Login from './pages/Login'      // ✅ UPDATED: Now points to pages folder
+// Page Components
+import Shop from './pages/Shop'
+import Login from './pages/Login'
 import AdminDashboard from './pages/AdminDashboard'
-
+import LandingPage from './pages/LandingPage'
 const App = () => {
   return (
     <BrowserRouter>
@@ -15,20 +13,22 @@ const App = () => {
         <Routes>
           
           {/* 1. HOME PAGE */}
+          {/* We wrap Home in a Layout (Navbar + Footer) */}
           <Route 
             path="/" 
             element={
               <>
                 <Navbar />
                 <div className="flex-grow">
-                  <Home />
+                 <LandingPage/>
                 </div>
-                <Footer />
+                
               </>
             } 
           />
 
-          {/* 2. SHOP PAGE (Updated Path) */}
+          {/* 2. SHOP PAGE */}
+          {/* Same Layout wrapper for consistency */}
           <Route 
             path="/shop" 
             element={
@@ -37,12 +37,11 @@ const App = () => {
                 <div className="flex-grow">
                   <Shop />
                 </div>
-                <Footer />
               </>
             } 
           />
 
-          {/* 3. LOGIN PAGE (Updated Path) */}
+          {/* 3. LOGIN PAGE */}
           <Route 
             path="/login" 
             element={
@@ -51,15 +50,13 @@ const App = () => {
                 <div className="flex-grow">
                   <Login />
                 </div>
-                <Footer />
               </>
             } 
           />
 
-          {/* 4. ADMIN DASHBOARD (Protected) */}
-          <Route path="/admin/*" element={
-              <AdminDashboard />
-          } />
+          {/* 4. ADMIN DASHBOARD */}
+          {/* Admin has its own internal layout (Sidebar), so we render it standalone */}
+          <Route path="/admin/*" element={<AdminDashboard />} />
 
           {/* 5. CATCH ALL (404) */}
           <Route path="*" element={<Navigate to="/" replace />} />

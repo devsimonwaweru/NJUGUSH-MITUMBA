@@ -6,7 +6,8 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import BusinessGuideModal from '../components/BusinessGuideModal'
 
-const Shop = ({ onOpenHowToOrder, onOpenSourcing }) => {
+// eslint-disable-next-line no-empty-pattern
+const Shop = ({  }) => {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [isGuideOpen, setIsGuideOpen] = useState(false)
@@ -34,10 +35,6 @@ const Shop = ({ onOpenHowToOrder, onOpenSourcing }) => {
   return (
     <div className="min-h-screen flex flex-col font-sans bg-gray-50">
       
-      <Navbar 
-        onOpenHowToOrder={onOpenHowToOrder} 
-        onOpenSourcing={onOpenSourcing} 
-      />
       
       {/* Shop Header */}
       <header className="bg-primary text-white py-16 relative overflow-hidden">
@@ -87,7 +84,6 @@ const Shop = ({ onOpenHowToOrder, onOpenSourcing }) => {
         )}
       </div>
 
-      <Footer />
       
       {/* The Business Guide Modal */}
       <BusinessGuideModal 

@@ -1,4 +1,5 @@
-import Navbar from '../components/Navbar'
+import { useState } from 'react'
+
 import Hero from '../components/Hero'
 import TrustStrip from '../components/TrustStrip'
 import CustomerSpotlight from '../components/CustomerSpotlight'
@@ -9,16 +10,23 @@ import SubmitReview from '../components/SubmitReview'
 import Community from '../components/Community'
 import Footer from '../components/Footer'
 
-const LandingPage = ({ onOpenHowToOrder, onOpenSourcing, onOpenGuide }) => { // Accept new prop
+import BusinessGuideModal from '../components/BusinessGuideModal'
+import SourcingModal from '../components/SourcingModal'
+
+const LandingPage = () => {
+  // Modal state lives HERE
+  const [isGuideOpen, setIsGuideOpen] = useState(false)
+  const [isSourcingOpen, setIsSourcingOpen] = useState(false)
+
   return (
     <div className="min-h-screen flex flex-col font-sans bg-gray-50">
-      <Navbar 
-        onOpenHowToOrder={onOpenHowToOrder} 
-        onOpenSourcing={onOpenSourcing} 
-      />
-      
+
       <main>
-        <Hero onOpenGuide={onOpenGuide} /> {/* Pass to Hero */}
+        <Hero
+          onOpenGuide={() => setIsGuideOpen(true)}
+          onOpenSourcing={() => setIsSourcingOpen(true)}
+        />
+
         <TrustStrip />
         <CustomerSpotlight />
         <Products />
@@ -29,6 +37,18 @@ const LandingPage = ({ onOpenHowToOrder, onOpenSourcing, onOpenGuide }) => { // 
       </main>
 
       <Footer />
+
+      {/* MODALS (global overlays) */}
+      <BusinessGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+      />
+
+      <SourcingModal
+        isOpen={isSourcingOpen}
+        onClose={() => setIsSourcingOpen(false)}
+      />
+
     </div>
   )
 }
