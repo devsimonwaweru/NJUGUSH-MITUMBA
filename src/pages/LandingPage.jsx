@@ -14,7 +14,7 @@ import BusinessGuideModal from '../components/BusinessGuideModal'
 import SourcingModal from '../components/SourcingModal'
 
 const LandingPage = () => {
-  // Modal state lives HERE
+  // Modal state lives HERE below
   const [isGuideOpen, setIsGuideOpen] = useState(false)
   const [isSourcingOpen, setIsSourcingOpen] = useState(false)
 
